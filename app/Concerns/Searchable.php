@@ -2,8 +2,17 @@
 
 namespace App\Concerns;
 
+use App\Observers\ElasticsearchObserver;
+
 trait Searchable
 {
+    public static function bootSearchable()
+    {
+        if (config('services.elasticsearch.enabled')) {
+            static::observe(ElasticsearchObserver::class);
+        }
+    }
+
     public function getSearchIndex(): string
     {
         return $this->getTable();
